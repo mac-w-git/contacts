@@ -12,16 +12,23 @@ let contacts = []
 function addContact(event) {
   event.preventDefault()
   let form = event.target
-
+  /**let contactName = form.name.value
+  let contactPhone = form.phone.value
+  let contactEmergency = form.emergencyContact.checked
+  let contactFormId = generateId()*/
   let contact = {
     id: generateId(),
     name: form.name.value,
     phone: form.phone.value,
     emergencyContact: form.emergencyContact.checked
   }
+  /**console.log( contact.id, contact.name, contact.phone, contact.ice)*/
+  /**contacts.push({contactId: contactFormId, Name: contactName, Phone: contactPhone, Emergency: contactEmergency})*/
+  /** console.log(contacts) */
   contacts.push(contact)
   saveContacts()
   form.reset()
+  
 }
 
 /**
@@ -31,6 +38,8 @@ function addContact(event) {
 function saveContacts() {
   window.localStorage.setItem("contacts", JSON.stringify(contacts))
   drawContacts()
+
+ 
 }
 
 /**
@@ -40,9 +49,8 @@ function saveContacts() {
  */
 function loadContacts() {
   let storedContacts = JSON.parse(window.localStorage.getItem("contacts"))
-  if (storedContacts) {
-    contacts = storedContacts
-  }
+  if (storedContacts) {contacts = storedContacts}
+  
 }
 
 /**
@@ -51,23 +59,25 @@ function loadContacts() {
  * contacts in the contacts array
  */
 function drawContacts() {
-  let contactListElement = document.getElementById("contact-list")
-  let contactsTemplate = ""
+  let template = ""
   contacts.forEach(contact => {
-    contactsTemplate += `
-    <div class="contact-card card mt-1 mb-1 ${contact.emergencyContact ? 'emergency-contact' : ''}">
-      <h3 class="mt-1 mb-1">${contact.name}</h3>
-      <div class="d-flex space-between">
+    template += `
+      <div class="card mt-1 mb-1 ${contact.emergencyContact ? 'emergency-contact' : ''} ">
+        <h3 class="mt-1 mb-1">${contact.name}</h3>
+        <div class="d-flex space-between">
           <p>
             <i class="fa fa-fw fa-phone"></i>
             <span>${contact.phone}</span>
           </p>
-          <i class="action fa fa-trash text-danger" onclick="removeContact('${contact.id}')"></i>
+          <i class="action fa fa-trash text-danger" onclick="removeContact('${contact.id}')" title="Remove Contact">
+          </i>
+          
+          
         </div>
-    </div>
-    `
+      </div>` 
   })
-  contactListElement.innerHTML = contactsTemplate
+  document.getElementById("contact-list").innerHTML = template
+ 
 }
 
 /**
@@ -80,7 +90,8 @@ function drawContacts() {
  * @param {string} contactId 
  */
 function removeContact(contactId) {
-  let index = contacts.findIndex(contact => contact.id == contactId)
+  let index = contacts.findIndex(contact => contact.id == contactId )
+  /** console.log(index) */
   if (index == -1) {
     throw new Error("Invalid Contact Id")
   }
@@ -92,8 +103,12 @@ function removeContact(contactId) {
  * Toggles the visibility of the AddContact Form
  */
 function toggleAddContactForm() {
-  document.getElementById('new-contact-form').classList.toggle("hidden")
+  
+  document.getElementById("new-contact-form").classList.toggle("hidden")
+  
 }
+
+
 
 
 /**
